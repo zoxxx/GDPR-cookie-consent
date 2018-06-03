@@ -6,3 +6,5 @@ Include this file before any other JS if possible, on your page(s). It will work
 
 # cm-body.js
 Include this file before closing body tag.
+
+If you need more details read this blog post: http://www.inforepublic.org/gdpr-cookie-consent-script-open-source/
