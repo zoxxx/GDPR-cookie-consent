@@ -1,4 +1,7 @@
 var CM_cookieManager = (function() {
+    // set activeForAll to true if you want to activate consent management for all visitors regardless of geolocation
+    // if activeForAll is fakse than consent management is only active for EU locations
+    const activeForAll = false;
     // if you really really need session cookie
     const ignoredCookie = 'session_cookie';
     var gdprZone = false;
@@ -49,13 +52,14 @@ var CM_cookieManager = (function() {
     return {
         start: function () {
             if (document.cookie.indexOf('CM_cookieConsent=1') === -1) {
-                killCookies();
                 var janOffset = new Date(new Date().getFullYear(), 0, 1).getTimezoneOffset();
                 var julOffset = new Date(new Date().getFullYear(), 6, 1).getTimezoneOffset();
 
                 // almost only EU countries in 0, +1 and +2 have DST
-                if (janOffset >= -120 && janOffset <= 0 && julOffset < janOffset) {
+                if ((janOffset >= -120 && janOffset <= 0 && julOffset < janOffset) || activeForAll === true) {
                     gdprZone = true;
+                    // make sure no cookies before me
+                    killCookies();
                     var cookieDesc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
                                     Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
                     if (cookieDesc && cookieDesc.configurable) {
